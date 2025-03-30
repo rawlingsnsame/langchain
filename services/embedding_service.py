@@ -3,6 +3,7 @@ from typing import List
 from config.settings import settings
 
 from tenacity import retry, stop_after_attempt, wait_exponential
+from utils.error_management import get_friendly_error_message
 
 import time
 import openai
@@ -27,7 +28,7 @@ class EmbeddingService:
             )
         except Exception as e:
             logger.error(f"Error in _initialize_embeddings: {e}")
-            raise
+            return get_friendly_error_message(e)
     @retry(
         stop=stop_after_attempt(3),
         wait=wait_exponential(multiplier=1, min=4, max=10),
@@ -38,12 +39,9 @@ class EmbeddingService:
         try:
             text = text.replace("\n", " ")
             return self.model.embed_query(text)
-        except openai.APIConnectionError as e:
-            logger.error(f"API Connection Error: {e}")
-            raise
         except Exception as e:
             logger.error(f"Error in embed_query: {e}")
-            raise
+            return get_friendly_error_message(e)
 
     @retry(
         stop=stop_after_attempt(3),
@@ -54,12 +52,8 @@ class EmbeddingService:
         try:
             texts = [text.replace("\n", " ") for text in texts]
             return self.model.embed_documents(texts)
-        except openai.APIConnectionError as e:
-            logger.error(f"API Connection Error: {e}")
-            raise
         except Exception as e:
-            logger.error(f"Error in embed_documents: {e}")
-            raise
+            return get_friendly_error_message(e)
 
     def _call_openai_api(self, texts: List[str]) -> List[List[float]]:
         retries = 3
@@ -73,14 +67,14 @@ class EmbeddingService:
                     api_key = self.api_key
                 )
                 return [item["embedding"] for item in response["data"]]
-            except openai.RateLimitError:
+            except openai.RateLimitError as e:
                 if attempt < retries - 1:
                     time.sleep(delay)
                     delay *= 2
                 else:
-                    raise RuntimeError("Rate limit exceeded. Try again later.")
+                    return get_friendly_error_message(e)
             except Exception as e:
-                raise RuntimeError(f"Error calling OpenAI API: {e}")
+                return get_friendly_error_message(e)
 
     def generate_embeddings(self, texts: List[str]) -> List[List[float]]:
         return self._call_openai_api(texts)

@@ -56,11 +56,12 @@ class QueryService:
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are a tax assistant with name taxbotspecializing in Cameroon tax regulations. " + \
+                        "content": "You are a tax assistant with name taxbotspecializing in Cameroon tax regulations. "
                         "Provide clear, precise answers based on the given context."
                         "If the question is not related to tax in any way, tell the user nicely that you are not able to answer it."
                         "But your happy to help with any tax related questions." 
                         "How ever, if they are greetings, respond with a friendly greeting."
+                        # "Add references to the section of the pdf where you got the answer from. If you can find it in the context"
                     },
                     {
                         "role": "user",

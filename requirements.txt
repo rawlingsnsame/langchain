@@ -1,0 +1,7 @@
+langchain_openai==0.3.11
+langchain_pinecone==0.2.3
+openai==1.69.0
+pinecone==6.0.2
+python-dotenv==1.1.0
+tenacity==9.0.0
+urllib3==2.3.0
