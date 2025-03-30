@@ -1,5 +1,3 @@
-import openai
-
 from services.embedding_service import EmbeddingService
 from services.vectorestore_service import VectorStoreService
 from services.query_service import QueryService
@@ -36,7 +34,7 @@ def main(prompt):
         error_msg = get_friendly_error_message(e)
         return error_msg
 
-
-prompt = "what is the personal income tax rate for Cameroon."
-response = main(prompt)
-print(response)
+# uncomment for a demo
+# prompt = "what is the personal income tax rate for Cameroon."
+# response = main(prompt)
+# print(response)
