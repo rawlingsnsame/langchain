@@ -37,7 +37,9 @@ class EmbeddingService:
 
     def embed_query(self, text: str) -> List[float]:
         try:
-            text = text.replace("\n", " ")
+            if not text or not isinstance(text, str):
+                raise ValueError("Invalid input: text must be a non-empty string")
+            text = text.replace("\n", " ").strip()
             return self.model.embed_query(text)
         except Exception as e:
             logger.error(f"Error in embed_query: {e}")
