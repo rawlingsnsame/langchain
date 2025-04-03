@@ -1,6 +1,7 @@
 # Cameroon Tax Code AI Assistant
 
 An AI-powered application that answers questions about Cameroon's tax code using OpenAI and Pinecone for vector search.
+To perform chats with this App make a connection through its websocket
 
 ## Prerequisites
 
@@ -82,7 +83,8 @@ print(response)
 │   ├── error_management.py     # Error handling
 │   └── preprocessing.py        # Query preprocessing
 ├── .env                    # Environment variables
-├── main.py                # Main application
+├── mainbot.py                # Chatbot Holder
+├── app.py                # Main Appplication entering point
 └── requirements.txt       # Dependencies
 ```
 

@@ -1,3 +1,4 @@
+import asyncio
 from services.embedding_service import EmbeddingService
 from services.vectorestore_service import VectorStoreService
 from services.query_service import QueryService
@@ -17,7 +18,7 @@ def initialize_vectorstore():
         raise CustomApplicationError("Failed to initialize vectorstore") from e
 
 
-def main(prompt):
+async def chatbot(prompt):
 
     try:
         embedding_service, vector_storeService, query_service = initialize_vectorstore()
@@ -27,14 +28,10 @@ def main(prompt):
 
         retrieved_docs = query_service.process_query(prompt)
         response = query_service.generate_response(retrieved_docs, prompt)
-
+        await asyncio.sleep(1)
         return {"response": response}
 
     except Exception as e:
         error_msg = get_friendly_error_message(e)
         return error_msg
 
-# uncomment for a demo
-# prompt = "what is the personal income tax rate for Cameroon."
-# response = main(prompt)
-# print(response)
